@@ -1,15 +1,17 @@
 import express from "express";
 import  {createPool} from 'mysql2/promise'
 const app = express()
+import { config } from 'dotenv'
+
+config()
 
 const pool = createPool({
-    host: 'localhost',
+    host: process.env.HOST,
     user: 'root',
-    password: "123456",
-    port: 3307
+    password: process.env.PASSWORD,
+    port: 3306,
+    database: process.env.DBNAME
 })
-
-
 
 app.get ('/',(req, res) =>{
     res.send('hello world')
