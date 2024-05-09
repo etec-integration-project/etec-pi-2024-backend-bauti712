@@ -1,0 +1,13 @@
+pasos para iniciar el programa
+
+1) clonar el repositorio a visual studio code con el siguiente comando 
+     "git clone https://github.com/etec-integration-project/etec-pi-2024-backend-bauti712.git"
+
+
+2) en caso de no tener la carpeta "node_modules" debemos instalar las dependencias con el siguiente comando
+     "npm i"
+
+
+     
+3) una vez instalado todo procedemos a iniciar el servidor con el siguiente comando:
+     "docker compose up --build"
