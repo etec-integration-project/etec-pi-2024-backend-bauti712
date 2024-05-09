@@ -1,0 +1,26 @@
+{
+  "name": "etec-pi-2024-backend-bauti712",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etec-integration-project/etec-pi-2024-backend-bauti712.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/etec-integration-project/etec-pi-2024-backend-bauti712/issues"
+  },
+  "homepage": "https://github.com/etec-integration-project/etec-pi-2024-backend-bauti712#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7"
+  }
+}
