@@ -1,12 +1,17 @@
 pasos para iniciar el programa
 
+Bautista cola 6to informatica 
+
 1) clonar el repositorio a visual studio code con el siguiente comando 
      "git clone https://github.com/etec-integration-project/etec-pi-2024-backend-bauti712.git"
 
 
-2) procedemos a iniciar el servidor con el siguiente comando:
+2) ahora colocamos el comando "cd etec-pi-2024-backend-bauti712" esto lo hacemos para poder ingresar al programa
+
+
+3) procedemos a iniciar el servidor con el siguiente comando:
      "docker compose up --build"
 
 
      
-3)  agregamos /ping a la url del navegaor para ver las consultas a base de datos
+4)  agregamos /ping a la url del navegaor para ver las consultas a base de datos
