@@ -1,28 +1,54 @@
-import express from "express";
-import  {createPool} from 'mysql2/promise'
-const app = express()
-import { config } from 'dotenv'
+import express from 'express';
+import { createPool } from 'mysql2/promise';
+import { config } from 'dotenv';
+import creacionUsuarios from './routes/creacionUsuarios.js';
 
-config()
+config();
 
-const pool = createPool({
+const app = express();
+
+
+export const pool = createPool({
     host: process.env.HOST,
     user: 'root',
-    password: process.env.PASSWORD,
-    port: 3306,
-    database: process.env.DBNAME
-})
+    password:process.env.PASSWORD,
 
-app.get ('/',(req, res) =>{
-    res.send('hello world')
+    
+    database: process.env.DBNAME,
+    port:3306
+    
+    
+});
 
-})
+app.use(express.json());
 
-app.get ('/ping', async (req, res) =>{
-    const result = await pool.query('SELECT NOW()')
-    res.json(result[0])
+const initializeDatabase = async () => {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        `);
+        console.log("Tabla 'users' creada o ya existe.");
+    } catch (error) {
+        console.error('Error al inicializar la base de datos:', error);
+    }
+};
 
-})
+app.get('/', (req, res) => {
+    res.send('Hola');
+});
 
-app.listen(3000)
-console.log('server on port', 3000)
+app.get('/ping', async (req, res) => {
+    const resultado = await pool.query('SELECT NOW()');
+    res.json(resultado[0]);
+});
+
+app.use('/creacionUsuarios', creacionUsuarios);
+
+app.listen(3000, async () => {
+    await initializeDatabase();
+    console.log('Servidor corriendo en el puerto', 3000);
+});
