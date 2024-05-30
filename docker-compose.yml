@@ -6,7 +6,7 @@ services:
       - MYSQL_DATABASE=bautistadb
     restart: always
     ports:
-      - 3306:3306
+      - 3307:3306
     # volumes:
       # - ./mysql-init-scripts:/docker-entrypoint-initdb.d
   app:
