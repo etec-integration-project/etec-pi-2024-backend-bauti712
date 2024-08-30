@@ -1,23 +1,26 @@
 import express from 'express';
 import { createPool } from 'mysql2/promise';
 import { config } from 'dotenv';
+import cors from 'cors';
 import creacionUsuarios from './routes/creacionUsuarios.js';
 
 config();
 
 const app = express();
 
+// Configuración de CORS
+app.use(cors({
+    origin: 'http://localhost:3000', // Permite solicitudes desde este origen
+    methods: ['GET', 'POST'], // Permite estos métodos HTTP
+    allowedHeaders: ['Content-Type'], // Permite estos headers
+}));
 
 export const pool = createPool({
     host: process.env.HOST,
     user: 'root',
-    password:process.env.PASSWORD,
-
-    
+    password: process.env.PASSWORD,
     database: process.env.DBNAME,
-    port:3306
-    
-    
+    port: 3306
 });
 
 app.use(express.json());
@@ -42,13 +45,18 @@ app.get('/', (req, res) => {
 });
 
 app.get('/ping', async (req, res) => {
-    const resultado = await pool.query('SELECT NOW()');
-    res.json(resultado[0]);
+    try {
+        const [resultado] = await pool.query('SELECT NOW()');
+        res.json(resultado[0]);
+    } catch (error) {
+        console.error('Error al consultar la base de datos:', error);
+        res.status(500).send('Error al consultar la base de datos');
+    }
 });
 
 app.use('/creacionUsuarios', creacionUsuarios);
 
-app.listen(3000, async () => {
+app.listen(3001, async () => {
     await initializeDatabase();
-    console.log('Servidor corriendo en el puerto', 3000);
+    console.log('Servidor corriendo en el puerto', 3001);
 });
