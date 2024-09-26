@@ -15,8 +15,8 @@ Bautista cola 6to informatica
      
 3)una vez hecho esto vamos a realizar esta secuencia de comandos EN ORDEN! 
     1-     "docker compose up -d mysqldb"
-    2-     "docker compose up -d --build app"
-    3-     "docker compose down app"
+    2-     "docker compose up -d --build backend"
+    3-     "docker compose down backend"
     4-     "docker compose up --build"
 
     una vez hecho esto ya deberia decir "tabla users creada o ya existe"
