@@ -9,11 +9,7 @@ config();
 const app = express();
 
 // Configuración de CORS
-app.use(cors({
-    origin: 'http://localhost:3000', // Permite solicitudes desde este origen
-    methods: ['GET', 'POST'], // Permite estos métodos HTTP
-    allowedHeaders: ['Content-Type'], // Permite estos headers
-}));
+app.use(cors());
 
 export const pool = createPool({
     host: process.env.HOST,
@@ -40,11 +36,11 @@ const initializeDatabase = async () => {
     }
 };
 
-app.get('/', (req, res) => {
+app.get('/app/', (req, res) => {
     res.send('Hola');
 });
 
-app.get('/ping', async (req, res) => {
+app.get('/app/ping', async (req, res) => {
     try {
         const [resultado] = await pool.query('SELECT NOW()');
         res.json(resultado[0]);
@@ -54,7 +50,7 @@ app.get('/ping', async (req, res) => {
     }
 });
 
-app.use('/creacionUsuarios', creacionUsuarios);
+app.use('/app/creacionUsuarios', creacionUsuarios);
 
 app.listen(3001, async () => {
     await initializeDatabase();
