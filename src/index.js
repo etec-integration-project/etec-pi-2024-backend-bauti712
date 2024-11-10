@@ -32,7 +32,7 @@ const initializeDatabase = async () => {
         `);
         console.log("Tabla 'users' creada o ya existe.");
     } catch (error) {
-        console.error('Error al inicializar la base de datos:', error);
+        console.error('Hola, Error al inicializar la base de datos:', error);
     }
 };
 
