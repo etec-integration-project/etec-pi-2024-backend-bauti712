@@ -12,11 +12,11 @@ const app = express();
 app.use(cors());
 
 export const pool = createPool({
-    host: "127.0.0.1",
+    host: process.env.HOST,
     user: 'root',
-    password: "12345",
-    port: 3306 //TODO CAMBIAR A 3306
-
+    password: process.env.PASSWORD,
+    port: 3306,
+    database: process.env.DBNAME
 });
 
 app.use(express.json());
