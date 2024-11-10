@@ -52,7 +52,7 @@ app.get('/app/ping', async (req, res) => {
 
 app.get('/app/productos', async (req, res) => {
     return res.json({
-        productos: [
+        products: [
             {
               id: 1,
               imagen: "babolat",
