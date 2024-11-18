@@ -2,6 +2,7 @@ import express from 'express';
 import { createPool } from 'mysql2/promise';
 import { config } from 'dotenv';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import creacionUsuarios from './routes/creacionUsuarios.js';
 
 config();
@@ -10,6 +11,7 @@ const app = express();
 
 // Configuración de CORS
 app.use(cors());
+app.use(cookieParser())
 
 export const pool = createPool({
     host: process.env.HOST,

@@ -17,6 +17,10 @@ export const registrar = async (req, res) => {
 
         const passwordHashed = await bcrypt.hash(password, 8);
         const [results] = await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, passwordHashed]);
+        const cookie_jwt = jwt.sign(results, process.env.JWT_SECRET );
+        res.cookie('bauti712-cookie', cookie_jwt);
+
+
         res.status(201).send('Usuario registrado con éxito');
     } catch (error) {
         res.status(500).send('Error al registrar usuario');
