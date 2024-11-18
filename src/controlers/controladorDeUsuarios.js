@@ -16,8 +16,8 @@ export const registrar = async (req, res) => {
         }
 
         const passwordHashed = await bcrypt.hash(password, 8);
-        const [results] = await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, passwordHashed]);
-        const cookie_jwt = jwt.sign(results, process.env.JWT_SECRET );
+        const results = await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, passwordHashed]);
+        const cookie_jwt = jwt.sign(results[0], process.env.JWT_SECRET );
         res.cookie('bauti712-cookie', cookie_jwt);
 
 
