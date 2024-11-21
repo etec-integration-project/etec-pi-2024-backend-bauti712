@@ -32,7 +32,13 @@ const initializeDatabase = async () => {
                 password VARCHAR(255) NOT NULL
             )
         `);
-        console.log("Tabla 'users' creada o ya existe.");
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS cart (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                cart LONGTEXT NOT NULL
+            )
+        `);
+        console.log("Tabla 'users' y 'cart' creadas o ya existen.");
     } catch (error) {
         console.error('Hola, Error al inicializar la base de datos:', error);
     }
@@ -86,6 +92,19 @@ app.get('/app/productos', async (req, res) => {
           ]
     })
 })
+
+app.post('/app/cart', async (req, res) => {
+    const { jsonifiedCart } = req.body;
+
+    try {
+        const [results] = await pool.query('INSERT INTO cart (cart) VALUES (?)', [jsonifiedCart]);
+
+        res.status(201).send('Carrito registrado con éxito');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al registrar carrito');
+    }
+});
 
 app.use('/app/creacionUsuarios', creacionUsuarios);
 
