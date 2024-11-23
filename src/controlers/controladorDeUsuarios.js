@@ -74,6 +74,12 @@ export const iniciarSesion = async (req, res) => {
         res.status(500).send('Error al iniciar sesión');
     }
 };
+export const crearProducto = async (req, res) => {
+    const {productName, price, productUrl} = req
+    await pool.query(`INSERT INTO products (productName, price, productUrl) 
+VALUES (${productName}, ${price}, ${productUrl});
+`)
+}
 
 export const listarUsuarios = async (req, res) => {
     try {

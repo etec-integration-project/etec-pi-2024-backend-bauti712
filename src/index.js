@@ -6,7 +6,36 @@ import cookieParser from 'cookie-parser';
 import creacionUsuarios from './routes/creacionUsuarios.js';
 
 config();
-
+const products =  [
+    {
+      id: 1,
+      imagen: "babolat",
+      nombre: "test jhighjuyy jhjhjkjk uva",
+      descripcion: "Raqueta de alta gama para jugadores profesionales. Test test",
+      precio: 250.00,
+    },
+    {
+      id: 2,
+      imagen: "head",
+      nombre: "Raqueta de Tenis Head",
+      descripcion: "Ideal para jugadores avanzados que buscan control y potencia.",
+      precio: 230.00,
+    },
+    {
+      id: 3,
+      imagen: "wilson",
+      nombre: "Raqueta de Tenis Wilson",
+      descripcion: "Equilibrio perfecto entre potencia y control para todo tipo de jugadores.",
+      precio: 210.00,
+    },
+    {
+      id: 4,
+      imagen: "yonex",
+      nombre: "Raqueta de Tenis Yonex",
+      descripcion: "Raqueta ligera y maniobrable, perfecta para jugadores técnicos.",
+      precio: 240.00,
+    }
+  ]
 const app = express();
 
 // Configuración de CORS
@@ -60,36 +89,22 @@ app.get('/app/ping', async (req, res) => {
 
 app.get('/app/productos', async (req, res) => {
     return res.json({
-        products: [
-            {
-              id: 1,
-              imagen: "babolat",
-              nombre: "test jhighjuyy jhjhjkjk uva",
-              descripcion: "Raqueta de alta gama para jugadores profesionales. Test test",
-              precio: 250.00,
-            },
-            {
-              id: 2,
-              imagen: "head",
-              nombre: "Raqueta de Tenis Head",
-              descripcion: "Ideal para jugadores avanzados que buscan control y potencia.",
-              precio: 230.00,
-            },
-            {
-              id: 3,
-              imagen: "wilson",
-              nombre: "Raqueta de Tenis Wilson",
-              descripcion: "Equilibrio perfecto entre potencia y control para todo tipo de jugadores.",
-              precio: 210.00,
-            },
-            {
-              id: 4,
-              imagen: "yonex",
-              nombre: "Raqueta de Tenis Yonex",
-              descripcion: "Raqueta ligera y maniobrable, perfecta para jugadores técnicos.",
-              precio: 240.00,
-            }
-          ]
+        products
+          
+    })
+})
+app.post('/app/productos', async (req, res) => {
+    const  {productName, price, productUrl} = req
+    products.push({id: products.lenght + 1,
+        imagen: productUrl,
+        nombre:productName,
+        descripcion: "",
+        precio: price
+
+
+    })
+    return res.json({
+        products
     })
 })
 
