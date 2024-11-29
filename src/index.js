@@ -156,6 +156,18 @@ app.post('/app/cart', async (req, res) => {
 
     try {
         const [results] = await pool.query('INSERT INTO cart (cart, user_id) VALUES (?, ?)', [jsonifiedCart, user_id]);
+        
+        const usersIds = [results.map(e => e.user_id)];
+        console.log({usersIds})
+
+        const users = []
+
+        for(const id of usersIds){
+            const result = await pool.query(`SELECT * FROM users where users.id = ${id}`)
+            users.push(result)
+        }  
+
+        console.log({users})
 
         res.status(201).send('Carrito registrado con éxito');
     } catch (error) {
