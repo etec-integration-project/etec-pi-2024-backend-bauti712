@@ -1,5 +1,5 @@
 import express from 'express';
-import { registrar, iniciarSesion, listarUsuarios } from '../controlers/controladorDeUsuarios.js';
+import { registrar, iniciarSesion, listarUsuarios, verificarSesion } from '../controlers/controladorDeUsuarios.js';
 
 const creacionUsuarios = express.Router();
 
@@ -7,6 +7,7 @@ const creacionUsuarios = express.Router();
 creacionUsuarios.post('/registrar', registrar);
 creacionUsuarios.post('/iniciar-sesion', iniciarSesion);
 creacionUsuarios.get('/usuarios', listarUsuarios);
+creacionUsuarios.get('/verificar-sesion', verificarSesion);
 
 // Simulando un array de productos en memoria
 const products = [

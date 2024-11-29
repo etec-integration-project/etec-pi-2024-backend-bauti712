@@ -3,6 +3,7 @@ import { createPool } from 'mysql2/promise';
 import { config } from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
 import creacionUsuarios from './routes/creacionUsuarios.js';
 
 config();
@@ -69,13 +70,15 @@ const initializeDatabase = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS cart (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                cart LONGTEXT NOT NULL
+                cart LONGTEXT NOT NULL,
+                user_id INT NOT NULL
             )
         `);
         await pool.query(`
             CREATE TABLE IF NOT EXISTS calificaciones (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                calificacion INT NOT NULL
+                calificacion INT NOT NULL,
+                username VARCHAR(255) NOT NULL
             )
         `);
         console.log("Tabla 'users' y 'cart' creadas o ya existen.");
@@ -140,10 +143,19 @@ app.post('/app/productos', async (req, res) => {
 });
 
 app.post('/app/cart', async (req, res) => {
+    const cookie = req.cookies['bauti712-cookie'];
+
+    if (!cookie) {
+        return res.status(403).send('Unauthorized');
+    }
+
+    const data = jwt.verify(cookie, process.env.JWT_SECRET);
+    const user_id = data.id;
+
     const { jsonifiedCart } = req.body;
 
     try {
-        const [results] = await pool.query('INSERT INTO cart (cart) VALUES (?)', [jsonifiedCart]);
+        const [results] = await pool.query('INSERT INTO cart (cart, user_id) VALUES (?, ?)', [jsonifiedCart, user_id]);
 
         res.status(201).send('Carrito registrado con éxito');
     } catch (error) {
@@ -162,16 +174,61 @@ app.get('/app/calificaciones', async (req, res) => {
 })
 
 app.post('/app/calificaciones', async (req, res) => {
+    const cookie = req.cookies['bauti712-cookie'];
+
+    if (!cookie) {
+        return res.status(403).send('Unauthorized');
+    }
+
+    const data = jwt.verify(cookie, process.env.JWT_SECRET);
+    const username = data.username;
+
     const { calificacion } = req.body;
 
     try {
-        const [results] = await pool.query('INSERT INTO calificaciones (calificacion) VALUES (?)', [calificacion]);
+        const [results] = await pool.query('INSERT INTO calificaciones (calificacion, username) VALUES (?, ?)', [calificacion, username]);
 
-        res.status(201).json({ mensaje: 'Calificación registrada con éxito'});
+        res.status(201).send('Calificación registrada con éxito');
     } catch (error) {
-        res.status(500).json({ mensaje: 'Error al calificar la página', error});
+        res.status(500).send('Error al calificar la página');
     }
 });
+
+app.get('/app/user_calificaciones', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM calificaciones');
+
+        res.status(200).json(rows);
+    } catch (error) {
+        res.status(500).send('Error al mostrar las calificaciones');
+    }
+});
+
+app.get('/app/user_carts', async (req, res) => {
+    const cookie = req.cookies['bauti712-cookie'];
+
+    if (!cookie) {
+        return res.status(403).send('Unauthorized');
+    }
+
+    const data = jwt.verify(cookie, process.env.JWT_SECRET);
+    const user_id = data.id;
+
+    try {
+        const [rows] = await pool.query('SELECT cart FROM cart WHERE user_id = ?', [user_id]);
+
+        const parsedRows = rows.map(row => {
+            return {
+                ...row,
+                cart: JSON.parse(row.cart)
+            };
+        });
+
+        res.status(200).json({ 'cart': parsedRows });
+    } catch (error) {
+        res.status(500).send('Error al mostrar las calificaciones');
+    }
+})
 
 app.use('/app/creacionUsuarios', creacionUsuarios);
 
@@ -180,3 +237,28 @@ app.listen(3001, async () => {
     await initializeDatabase();
     console.log('Servidor corriendo en el puerto', 3001);
 });
+
+
+// To parse this data:
+//
+//   import { Convert } from "./file";
+//
+//   const cart = Convert.toCart(json);
+
+// export interface Cart {
+//     id:       number;
+//     nombre:   string;
+//     price:    number;
+//     quantity: number;
+// }
+
+// Converts JSON strings to/from your types
+// export class Convert {
+//     static toCart(json) {
+//         return JSON.parse(json);
+//     }
+
+//     static cartToJson(value) {
+//         return JSON.stringify(value);
+//     }
+// }

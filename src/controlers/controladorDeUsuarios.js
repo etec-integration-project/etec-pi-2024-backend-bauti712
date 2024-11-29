@@ -56,7 +56,7 @@ export const iniciarSesion = async (req, res) => {
         }
 
         // Crear el token JWT
-        const token = jwt.sign({ id: usuario.id, username }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: usuario.id, username: username }, process.env.JWT_SECRET, {
             expiresIn: '1h', // Expira en 1 hora
         });
 
@@ -88,5 +88,21 @@ export const listarUsuarios = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al listar usuarios');
+    }
+};
+
+export const verificarSesion = (req, res) => {
+    const token = req.cookies['bauti712-cookie'];
+
+    if (!token) {
+        return res.status(401).json({ loggedIn: false, message: 'Falta token' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        res.status(200).json({ loggedIn: true, user: decoded });
+    } catch (error) {
+        console.error('Error al verificar el token:', error);
+        res.status(401).json({ loggedIn: false, message: 'Token invalido' });
     }
 };
