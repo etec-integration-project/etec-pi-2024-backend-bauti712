@@ -1,0 +1,23 @@
+services:
+  mysqldb:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bautistadb
+    restart: always
+    ports:
+      - 3307:3306
+    # volumes:
+      # - ./mysql-init-scripts:/docker-entrypoint-initdb.d
+  app:
+    build: .
+    depends_on:
+      - mysqldb
+    env_file:
+      - ./.env
+    environment:
+      - PASSWORD=123456
+      - DBNAME=bautistadb
+      - HOST=mysqldb
+    ports:
+      - "3001:3001"

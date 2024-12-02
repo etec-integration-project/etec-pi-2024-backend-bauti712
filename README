@@ -1,0 +1,49 @@
+pasos para iniciar el programa
+
+Bautista cola 6to informatica 
+
+1) clonar el repositorio a visual studio code con el siguiente comando 
+     "git clone https://github.com/etec-integration-project/etec-pi-2024-backend-bauti712.git"
+
+
+2) ahora colocamos el comando "cd etec-pi-2024-backend-bauti712" esto lo hacemos para poder ingresar al programa
+
+
+
+    
+
+     
+3)una vez hecho esto vamos a realizar esta secuencia de comandos EN ORDEN! 
+    1-     "docker compose up -d mysqldb"
+    2-     "docker compose up -d --build backend"
+    3-     "docker compose down backend"
+    4-     "docker compose up --build"
+
+    una vez hecho esto ya deberia decir "tabla users creada o ya existe"
+
+
+4) ahora crearemos el usuario usando curl para esto abriremos otra terminal y nos iremos al repo con el comando "cd etec-pi-2024-backend-bauti712"
+
+5) ahora colocamos las siguientes lineas de una en una 
+
+
+curl -X POST http://localhost:3000/creacionUsuarios/registrar \
+     -H "Content-Type: application/json" \
+     -d '{"username": "nuevo_usuario", "password": "contraseña123"}'
+
+     una vez hecho esto deberia decir usuario creado con exito 
+
+
+6) por ultimo vamos a verificar que el usuario exista en la base de datos 
+esto lo hacemos con el comando  "curl -X GET http://localhost:3000/creacionUsuarios/usuarios
+
+
+     
+
+
+
+
+
+
+
+
